@@ -1,0 +1,52 @@
+version: '3.4'
+
+services:
+  recall-seq:
+    image: datalust/seq:latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  
+  
+  recall-sqldata:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  recall-rabbitmq:
+    image: rabbitmq:3-management-alpine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  recall-textlist.api:
+    image: ${DOCKER_REGISTRY-}recall-textlist.api
+    build:
+      context: .
+      dockerfile: Contrib/TextList.Api/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  recall-list.api:
+    image: ${DOCKER_REGISTRY-}recall-list.api
+    build:
+      context: .
+      dockerfile: Core/List/List.Api/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  recall-envoygateway:
+    image: envoyproxy/envoy:v1.11.1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  recall-servicestatus:
+    image: ${DOCKER_REGISTRY-}recall-servicestatus
+    build:
+      context: .
+      dockerfile: Infrastructure/ServiceStatus/Dockerfile
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
