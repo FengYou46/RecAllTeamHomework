@@ -32,7 +32,12 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "35210:80"
-      
+
+  recall-maskedtextlist.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "35211:80"
       
   recall-list.api:
     environment:

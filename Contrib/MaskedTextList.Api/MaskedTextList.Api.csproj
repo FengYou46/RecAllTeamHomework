@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AssemblyName>RecAll.Contrib.MaskedTextList.Api</AssemblyName>
+        <RootNamespace>RecAll.Contrib.MaskedTextList.Api</RootNamespace>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <DockerfileContext>..\..</DockerfileContext>
+        <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="AutofacModules" />
+      <Folder Include="IntegrationEvents" />
+      <Folder Include="Migrations" />
+      <Folder Include="ViewModels" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.4" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+</Project>

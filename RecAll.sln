@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.RabbitMQ", "Infras
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventLog", "Infrastructure\IntegrationEventLog\IntegrationEventLog.csproj", "{CAFAB306-5FC7-449C-B7F1-1E1777FA0A00}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskedTextList.Api", "Contrib\MaskedTextList.Api\MaskedTextList.Api.csproj", "{B50CEE24-CE25-424C-8A57-8201AE691B1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{CAFAB306-5FC7-449C-B7F1-1E1777FA0A00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAFAB306-5FC7-449C-B7F1-1E1777FA0A00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAFAB306-5FC7-449C-B7F1-1E1777FA0A00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B50CEE24-CE25-424C-8A57-8201AE691B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B50CEE24-CE25-424C-8A57-8201AE691B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B50CEE24-CE25-424C-8A57-8201AE691B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B50CEE24-CE25-424C-8A57-8201AE691B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{66214485-5C41-4577-B5C4-383401EAD078} = {23BAB6E8-501C-4BC1-A2B2-CAA6DE44067C}
 		{91D9E9FB-CC52-4679-921E-009DB73BC70B} = {23BAB6E8-501C-4BC1-A2B2-CAA6DE44067C}
 		{CAFAB306-5FC7-449C-B7F1-1E1777FA0A00} = {23BAB6E8-501C-4BC1-A2B2-CAA6DE44067C}
+		{B50CEE24-CE25-424C-8A57-8201AE691B1E} = {E01A96E9-E6A2-4BF4-BC45-07B641EB1E51}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {94A5DFFA-8444-4D87-8702-72F1A667C687}
