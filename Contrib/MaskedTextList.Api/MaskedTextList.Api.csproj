@@ -15,7 +15,6 @@
       <Folder Include="AutofacModules" />
       <Folder Include="IntegrationEvents" />
       <Folder Include="Migrations" />
-      <Folder Include="ViewModels" />
     </ItemGroup>
 
     <ItemGroup>
@@ -30,7 +29,15 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+      <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+      <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructure\Infrastructure.Api\Infrastructure.Api.csproj" />
     </ItemGroup>
 
 </Project>
