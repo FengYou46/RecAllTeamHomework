@@ -2,10 +2,16 @@ using System.Net;
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using RecAll.Contrib.MaskedTextList.Api;
 using RecAll.Contrib.MaskedTextList.Api.Services;
+using RecAll.Infrastructure;
+using RecAll.Infrastructure.Api;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,13 +60,31 @@ try {
     //启动Controller，配置json序列化（配置json序列化未用到）
     builder.Services.AddControllers().AddJsonOptions(options =>
         options.JsonSerializerOptions.IncludeFields = true);
-    //涉及到swagger调试调用
+    //涉及到Swagger调试调用
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 
+    //开启模型验证，如Required特性标记，需要在Controller上开启ApiController
+    builder.Services.AddOptions().Configure<ApiBehaviorOptions>(options => {
+        options.InvalidModelStateResponseFactory = context =>
+            new OkObjectResult(ServiceResult.CreateInvalidParameterResult(
+                    new ValidationProblemDetails(context.ModelState).Errors
+                        .Select(
+                            p => $"{p.Key}: {string.Join(" / ", p.Value)}"))
+                .ToServiceResultViewModel());
+    });
+    
+    //启用了对该项目的健康检查功能，同时将所使用的数据库作为依赖项进行健康检查
+    builder.Services.AddHealthChecks()
+        .AddCheck("self", () => HealthCheckResult.Healthy())
+        .AddSqlServer(
+            builder.Configuration["MaskedTextListContext"]
+            , name: "MaskedTextListDb-check"
+            , tags: new[] { "MaskedTextListDb" });
+    
     var app = builder.Build();
 
-    //注册流水线，如果是开发模式则启动swagger
+    //注册流水线，如果是开发模式则启动Swagger
     if (app.Environment.IsDevelopment()) {
         app.UseSwagger();
         app.UseSwaggerUI();
@@ -75,16 +99,16 @@ try {
     //将用户输入的网址定向到特定的Controller
     app.UseEndpoints(endpoints => {
         endpoints.MapDefaultControllerRoute();
-        endpoints.MapControllers();
-        // endpoints.MapHealthChecks("/hc",
-        //     new HealthCheckOptions {
-        //         Predicate = _ => true,
-        //         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        //     });
-        // endpoints.MapHealthChecks("/liveness",
-        //     new HealthCheckOptions {
-        //         Predicate = r => r.Name.Contains("self")
-        //     });
+        endpoints.MapControllers();//自动将Controller的访问地址进行映射，即ItemController上面的[controller]
+        endpoints.MapHealthChecks("/hc",//映射健康检查路径
+            new HealthCheckOptions {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+        endpoints.MapHealthChecks("/liveness",
+            new HealthCheckOptions {
+                Predicate = r => r.Name.Contains("self")
+            });
     });
 
     //创建数据库
