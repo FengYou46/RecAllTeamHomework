@@ -99,12 +99,17 @@ try {
     //将用户输入的网址定向到特定的Controller
     app.UseEndpoints(endpoints => {
         endpoints.MapDefaultControllerRoute();
-        endpoints.MapControllers();//自动将Controller的访问地址进行映射，即ItemController上面的[controller]
-        endpoints.MapHealthChecks("/hc",//映射健康检查路径
+        //自动将Controller的访问地址进行映射，即ItemController上面的[controller]
+        endpoints.MapControllers();
+        
+        //映射健康检查路径
+        endpoints.MapHealthChecks("/hc",
             new HealthCheckOptions {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
+        
+        //如果健康则返回"Healthy"
         endpoints.MapHealthChecks("/liveness",
             new HealthCheckOptions {
                 Predicate = r => r.Name.Contains("self")
