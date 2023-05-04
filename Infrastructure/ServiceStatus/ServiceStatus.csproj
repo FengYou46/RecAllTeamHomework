@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <AssemblyName>RecAll.Infractructure.ServiceStatus</AssemblyName>
         <RootNamespace>RecAll.Infractructure.ServiceStatus</RootNamespace>
+        <UserSecretsId>d85bc511-3dc7-4630-bab0-7dfbf10af03b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

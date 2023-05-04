@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <AssemblyName>RecAll.Core.List.Api</AssemblyName>
         <RootNamespace>RecAll.Core.List.Api</RootNamespace>
+        <UserSecretsId>b7220e6e-6786-4c8b-8010-79c18217f914</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

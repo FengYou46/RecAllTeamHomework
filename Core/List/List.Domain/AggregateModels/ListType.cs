@@ -5,16 +5,21 @@ namespace RecAll.Core.List.Domain.AggregateModels;
 
 public class ListType : Enumeration {
     public const int TextId = 1;
+    public const int MaskedTextId = 2;
     
     public static ListType Text = 
         new(TextId, 
             nameof(Text).ToLowerInvariant(), 
-            nameof(Text));
+            nameof(Text)); 
+    public static ListType MaskedText = 
+        new(MaskedTextId, 
+            nameof(MaskedText).ToLowerInvariant(), 
+            nameof(MaskedText));
     
     public ListType(int id, string name, string displayName) : base(id, name,
         displayName) { }
     
-    private static ListType[] _list = { Text };
+    private static ListType[] _list = { Text, MaskedText };
 
     public static IEnumerable<ListType> List() => _list;
     
