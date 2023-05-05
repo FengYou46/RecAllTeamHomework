@@ -5,6 +5,7 @@ using RecAll.Infrastructure.EventBus.Abstractions;
 
 namespace RecAll.Contrib.MaskedTextList.Api.IntegrationEvents; 
 
+//消息队列接收消息、保存ItemID时的Handler
 public class ItemIdAssignedIntegrationEventHandler :
     IIntegrationEventHandler<ItemIdAssignedIntegrationEvent> {
     private readonly MaskedTextListContext _maskedTextListContext;

@@ -4,9 +4,9 @@ using RecAll.Infrastructure.Ddd.Domain.SeedWork;
 namespace RecAll.Core.List.Domain.AggregateModels;
 
 public class ListType : Enumeration {
-    public const int TextId = 1;
-    public const int MaskedTextId = 2;
-    
+    public const int TextId = 1;           //1为文本题目
+    public const int MaskedTextId = 2;     //2为带隐藏文本答案的文本题目
+
     public static ListType Text = 
         new(TextId, 
             nameof(Text).ToLowerInvariant(), 

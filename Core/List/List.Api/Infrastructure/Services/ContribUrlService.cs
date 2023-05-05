@@ -7,6 +7,7 @@ public class ContribUrlService : IContribUrlService {
     public string GetContribUrl(int listTypeId) {
         string route;
 
+        //根据listTypeId路由到不同微服务
         if (listTypeId == ListType.Text.Id) {
             route = "text";
         } else if (listTypeId == ListType.MaskedText.Id) {

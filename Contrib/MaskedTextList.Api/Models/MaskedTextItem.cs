@@ -7,7 +7,7 @@ public class MaskedTextItem {
     public int? ItemId { get; set; }
     //题目的内容
     public string Content { get; set; }
-    //不知道是用来干啥的 
+    //隐藏的题目答案
     public string MaskedContent { get; set; }
     //用户识别标识符
     public string UserIdentityGuid { get; set; }

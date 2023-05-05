@@ -9,6 +9,7 @@ public class InitialFunctions {
     public static string Namespace = typeof(InitialFunctions).Namespace;
     public static string AppName = Namespace;
     
+    //配置事件总线，会在Program.cs中启用
     public static void ConfigureEventBus(IApplicationBuilder app) {
         var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
     

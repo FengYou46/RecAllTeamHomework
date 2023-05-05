@@ -177,6 +177,7 @@ try {
         .GetService<MaskedTextListContext>();
     maskedTextContext!.Database.Migrate();
     
+    //启用消息总线
     InitialFunctions.ConfigureEventBus(app);
 
     app.Run();
