@@ -27,7 +27,7 @@ public class MaskedTextItemConfiguration
      * 决定了类型与数据库的映射关系
      */
     public void Configure(EntityTypeBuilder<MaskedTextItem> builder) {
-        builder.ToTable("MaskedTextItems");
+        builder.ToTable("maskedtextitems");
         builder.HasKey(p => p.Id);
         
         builder.Property(p => p.Id).UseHiLo("MaskedTextItemSeq",
@@ -38,7 +38,7 @@ public class MaskedTextItemConfiguration
 
         builder.Property(p => p.Content).IsRequired();
         
-        builder.Property(p => p.MaskedContent).IsRequired(false);
+        builder.Property(p => p.MaskedContent).IsRequired();    
 
         builder.Property(p => p.UserIdentityGuid).IsRequired();
         builder.HasIndex(p => p.UserIdentityGuid).IsUnique(false);

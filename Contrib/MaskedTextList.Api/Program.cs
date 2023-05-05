@@ -8,10 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using RabbitMQ.Client;
 using RecAll.Contrib.MaskedTextList.Api;
+using RecAll.Contrib.MaskedTextList.Api.AutofacModules;
 using RecAll.Contrib.MaskedTextList.Api.Services;
 using RecAll.Infrastructure;
 using RecAll.Infrastructure.Api;
+using RecAll.Infrastructure.EventBus;
+using RecAll.Infrastructure.EventBus.Abstractions;
+using RecAll.Infrastructure.EventBus.RabbitMQ;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +37,12 @@ try {
             });
     });
     
+    //启用Autofac
+    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+    builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => {
+        containerBuilder.RegisterModule(new ApplicationModule());
+    });
+    
     //启用Serilog，将Serilog加入到依赖注入容器中
     builder.Host.UseSerilog();
     
@@ -49,6 +60,35 @@ try {
 
     //依赖注入：IIdentityService
     builder.Services.AddTransient<IIdentityService, MockIdentityService>();
+    
+    //配置消息总线
+    builder.Services.AddSingleton<IRabbitMQConnection>(serviceProvider => {
+        var logger = serviceProvider
+            .GetRequiredService<ILogger<RabbitMQConnection>>();
+
+        var factory = new ConnectionFactory {
+            HostName = builder.Configuration["RabbitMQ"],
+            DispatchConsumersAsync = true
+        };
+
+        if (!string.IsNullOrWhiteSpace(
+                builder.Configuration["RabbitMQUserName"])) {
+            factory.UserName = builder.Configuration["RabbitMQUserName"];
+        }
+
+        if (!string.IsNullOrWhiteSpace(
+                builder.Configuration["RabbitMQPassword"])) {
+            factory.Password = builder.Configuration["RabbitMQPassword"];
+        }
+
+        var retryCount =
+            string.IsNullOrWhiteSpace(
+                builder.Configuration["RabbitMQRetryCount"])
+                ? 5
+                : int.Parse(builder.Configuration["RabbitMQRetryCount"]);
+
+        return new RabbitMQConnection(factory, logger, retryCount);
+    });
 
     //配置跨域
     builder.Services.AddCors(options => {
@@ -73,6 +113,22 @@ try {
                             p => $"{p.Key}: {string.Join(" / ", p.Value)}"))
                 .ToServiceResultViewModel());
     });
+    
+    //引入消息总线
+    builder.Services
+        .AddSingleton<IEventBusSubscriptionsManager,
+            InMemoryEventBusSubscriptionsManager>();
+    builder.Services.AddSingleton<IEventBus, RabbitMQEventBus>(
+        serviceProvider => new RabbitMQEventBus(
+            serviceProvider.GetRequiredService<IRabbitMQConnection>(),
+            serviceProvider.GetRequiredService<ILogger<RabbitMQEventBus>>(),
+            serviceProvider.GetRequiredService<ILifetimeScope>(),
+            serviceProvider.GetRequiredService<IEventBusSubscriptionsManager>(),
+            builder.Configuration["EventBusSubscriptionClientName"],
+            string.IsNullOrWhiteSpace(
+                builder.Configuration["EventBusRetryCount"])
+                ? 5
+                : int.Parse(builder.Configuration["EventBusRetryCount"])));
     
     //启用了对该项目的健康检查功能，同时将所使用的数据库作为依赖项进行健康检查
     builder.Services.AddHealthChecks()
@@ -120,6 +176,8 @@ try {
     var maskedTextContext = app.Services.CreateScope().ServiceProvider
         .GetService<MaskedTextListContext>();
     maskedTextContext!.Database.Migrate();
+    
+    InitialFunctions.ConfigureEventBus(app);
 
     app.Run();
     

@@ -131,6 +131,8 @@ public class RabbitMQEventBus : IEventBus, IDisposable {
             var concreteType = typeof(IIntegrationEventHandler<>)
                 .MakeGenericType(eventType);
             await Task.Yield();
+            
+            
             await (Task)concreteType.GetMethod("Handle")
                 .Invoke(handler, new[] { integrationEvent });
         }

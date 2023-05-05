@@ -13,8 +13,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="AutofacModules" />
-      <Folder Include="IntegrationEvents" />
       <Folder Include="Migrations" />
     </ItemGroup>
 
@@ -44,6 +42,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Core\List\List.Domain\List.Domain.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
       <ProjectReference Include="..\..\Infrastructure\Infrastructure.Api\Infrastructure.Api.csproj" />
     </ItemGroup>
 
